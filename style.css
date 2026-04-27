@@ -99,7 +99,7 @@ a {
     margin: 0 auto;
     padding: 0 24px;
     position: relative;
-    z-index: 1;
+    z-index: 1; /* 確保內容在背景之上 */
 }
 
 /* =========================================
@@ -148,6 +148,138 @@ a {
 
 .star::after {
     transform: translateX(50%) rotate(-45deg);
+}
+
+/* =========================================
+   🚀 全域背景：太空船與太空人
+   ========================================= */
+.space-elements {
+    position: fixed; /* 固定在全螢幕背景 */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0; /* 在星星上方，網頁內容下方 */
+    pointer-events: none; /* 確保不干擾滑鼠點擊 */
+    overflow: hidden;
+}
+
+/* 🚀 CSS 繪製：太空船 */
+.spaceship {
+    position: absolute;
+    top: 15%; /* 放在畫面右上角 */
+    right: 12%;
+    width: 60px;
+    height: 130px;
+    transform: rotate(-30deg);
+    animation: floatingShip 8s infinite ease-in-out;
+}
+
+.ship-body {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50% 50% 10px 10px;
+    border: 2px solid var(--accent-color);
+    background-color: rgba(5, 5, 9, 0.6); /* 加深一點底色避免透明 */
+    box-shadow: 0 0 20px var(--glow-color);
+}
+
+.ship-body::before {
+    content: '';
+    position: absolute;
+    top: -25px;
+    left: calc(50% - 25px);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--bg-color);
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 0 10px var(--glow-color);
+}
+
+/* 引擎與發光尾焰 */
+.ship-engine {
+    position: absolute;
+    bottom: -40px;
+    left: calc(50% - 15px);
+    width: 30px;
+    height: 50px;
+    border-radius: 50% 50% 10% 10%;
+    background: linear-gradient(to bottom, var(--accent-color), rgba(0, 0, 0, 0));
+    filter: drop-shadow(0 0 15px var(--accent-color));
+    opacity: 0.9;
+    animation: rocketTail 1.5s infinite ease-in-out;
+}
+
+@keyframes floatingShip {
+    0%, 100% { transform: translateY(0) rotate(-30deg); }
+    50% { transform: translateY(-25px) rotate(-28deg); }
+}
+
+@keyframes rocketTail {
+    0%, 100% { transform: translateY(0) scaleY(1); opacity: 0.9; }
+    50% { transform: translateY(5px) scaleY(0.85); opacity: 0.6; }
+}
+
+/* 👨‍🚀 CSS 繪製：太空人 */
+.astronaut {
+    position: absolute;
+    bottom: 15%; /* 放在畫面左下角 */
+    left: 10%;
+    width: 65px;
+    height: 110px;
+    transform: rotate(15deg);
+    animation: floatingAstronaut 12s infinite ease-in-out;
+}
+
+/* 身體 */
+.astronaut::before {
+    content: '';
+    position: absolute;
+    top: 25px;
+    left: 0;
+    width: 100%;
+    height: 85px;
+    border: 2px solid var(--text-primary);
+    border-radius: 10px;
+    background-color: rgba(30, 41, 59, 0.8);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* 頭盔 */
+.ast-helmet {
+    position: absolute;
+    top: -20px;
+    left: 7px;
+    width: 50px;
+    height: 50px;
+    border: 2px solid var(--text-primary);
+    border-radius: 50%;
+    background-image: 
+        radial-gradient(circle at 30% 30%, #fff 0%, rgba(255, 255, 255, 0.2) 60%),
+        var(--surface-color);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    z-index: 2;
+}
+
+/* 霓虹背包 */
+.ast-backpack {
+    position: absolute;
+    top: 35px;
+    right: -15px;
+    width: 35px;
+    height: 55px;
+    border: 2px solid var(--accent-color);
+    border-radius: 5px;
+    background-color: rgba(30, 41, 59, 0.9);
+    box-shadow: 0 0 20px var(--glow-color); /* 強烈的發光效果 */
+    transform: rotate(5deg);
+}
+
+@keyframes floatingAstronaut {
+    0%, 100% { transform: translateY(0) rotate(15deg); }
+    50% { transform: translateY(-40px) rotate(20deg); }
 }
 
 /* =========================================
@@ -217,14 +349,15 @@ section {
 }
 
 /* =========================================
-   Hero Section & 太空船與太空人
+   Hero Section
    ========================================= */
 .hero-section {
     min-height: 100vh;
     display: flex;
     align-items: center;
     position: relative;
-    background: radial-gradient(circle at 50% 40%, rgba(56, 189, 248, 0.1) 0%, rgba(0,0,0,0) 60%);
+    /* 原本的漸層拿掉一點，避免遮擋全域背景 */
+    background: radial-gradient(circle at 50% 40%, rgba(56, 189, 248, 0.05) 0%, rgba(0,0,0,0) 60%);
 }
 
 .hero-content {
@@ -311,136 +444,6 @@ section {
     color: white;
     box-shadow: 0 0 15px rgba(255,255,255,0.2);
     transform: translateY(-2px);
-}
-
-/* 🚀 太空元素容器 */
-.space-elements {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1; /* 位於星雲上方，內容下方 */
-    pointer-events: none; /* 確保不會干擾用戶與文字、按鈕互動 */
-}
-
-/* 🚀 CSS 繪製：太空船 */
-.spaceship {
-    position: absolute;
-    top: 25%; /* 行動裝置上可調整這裡 */
-    right: 15%;
-    width: 70px;
-    height: 150px;
-    transform: rotate(-25deg);
-    animation: floatingShip 8s infinite ease-in-out;
-}
-
-.ship-body {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50% 50% 10px 10px; /* 頂部圓，底部方 */
-    border: 2px solid var(--accent-color);
-    background-color: rgba(5, 5, 9, 0.3);
-    box-shadow: 0 0 15px var(--glow-color);
-    position: relative;
-}
-
-/* 太空船的頭部 */
-.ship-body::before {
-    content: '';
-    position: absolute;
-    top: -25px;
-    left: calc(50% - 25px);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: var(--bg-color);
-    border: 2px solid var(--accent-color);
-    box-shadow: 0 0 10px var(--glow-color);
-}
-
-/* 太空船引擎與發光尾焰 */
-.ship-engine {
-    position: absolute;
-    bottom: -35px;
-    left: calc(50% - 15px);
-    width: 30px;
-    height: 40px;
-    border-radius: 50% 50% 10% 10%;
-    background: linear-gradient(to bottom, var(--accent-color), rgba(0, 0, 0, 0));
-    filter: drop-shadow(0 0 10px var(--accent-color));
-    opacity: 0.8;
-    animation: rocketTail 2s infinite ease-in-out;
-}
-
-@keyframes floatingShip {
-    0%, 100% { transform: translateY(0) rotate(-25deg); }
-    50% { transform: translateY(-20px) rotate(-23deg); }
-}
-
-@keyframes rocketTail {
-    0%, 100% { transform: translateY(0) scaleY(1); opacity: 0.8; }
-    50% { transform: translateY(5px) scaleY(0.9); opacity: 0.6; }
-}
-
-/* 👨‍🚀 CSS 繪製：太空人 */
-.astronaut {
-    position: absolute;
-    bottom: 20%;
-    left: 15%;
-    width: 70px;
-    height: 120px;
-    transform: rotate(10deg);
-    animation: floatingAstronaut 12s infinite ease-in-out;
-}
-
-/* 太空人主體 */
-.astronaut::before {
-    content: '';
-    position: absolute;
-    top: 25px; /*身體，接上 Helmet */
-    left: 0;
-    width: 100%;
-    height: 100px;
-    border: 2px solid var(--text-primary);
-    border-radius: 10px;
-    background-color: rgba(5, 5, 9, 0.3);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-}
-
-/* 太空人頭盔面罩 */
-.ast-helmet {
-    position: absolute;
-    top: -25px;
-    left: 5px;
-    width: 50px;
-    height: 50px;
-    border: 2px solid var(--text-primary);
-    border-radius: 50%;
-    background-image: 
-        radial-gradient(circle at 30% 30%, #fff 0%, rgba(255, 255, 255, 0.1) 60%),
-        var(--surface-color);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
-}
-
-/* 太空人背包 */
-.ast-backpack {
-    position: absolute;
-    top: 40px;
-    right: -20px;
-    width: 40px;
-    height: 60px;
-    border: 2px solid var(--accent-color);
-    border-radius: 5px;
-    background-color: rgba(30, 41, 59, 0.5);
-    box-shadow: 0 0 15px var(--glow-color);
-    transform: rotate(10deg);
-}
-
-@keyframes floatingAstronaut {
-    0%, 100% { transform: translateY(0) rotate(10deg); }
-    50% { transform: translateY(-30px) rotate(15deg); }
 }
 
 /* =========================================
@@ -561,8 +564,16 @@ section {
         padding: 15px;
     }
 
-    /* 🪐 行動裝置上隱藏太空船和太空人，確保內容清晰 */
-    .space-elements {
-        display: none;
+    /* 在手機螢幕太小的時候，可以選擇縮小太空船和太空人 */
+    .spaceship {
+        transform: scale(0.6) rotate(-30deg);
+        right: 0%;
+        top: 10%;
+    }
+    
+    .astronaut {
+        transform: scale(0.6) rotate(15deg);
+        left: 0%;
+        bottom: 10%;
     }
 }
